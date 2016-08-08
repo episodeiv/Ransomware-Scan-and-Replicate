@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
 
  
 int makehist(FILE *fh,int *hist,int len)
@@ -49,8 +50,16 @@ main(int argc , char *argv[])
 	long fsz;
 	int len,*hist,histlen;
 	double H;
+
+	if(argv[1] == NULL) {
+		fprintf(stderr, "Usage: %s FILENAME\n", argv[0]);
+		exit(1);
+	}
 	if ((fh = fopen(argv[1],"rb")) == NULL )
-		printf("Error opening file %s\n", argv[1]);
+	{
+		perror("Error opening file");
+		exit(1);
+	}
 	else
 	{
         fstat(fileno(fh),&fileinfo);
